@@ -10,7 +10,7 @@ export const ContactForm = memo(() => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
-  const [userInfo, setUserInfo] = useState({ name: '', number: '' });
+  const [userInfo, setUserInfo] = useState({ name: '', phone: '' });
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -18,7 +18,7 @@ export const ContactForm = memo(() => {
   };
 
   const resetForm = () => {
-    setUserInfo({ name: '', number: '' });
+    setUserInfo({ name: '', phone: '' });
   };
 
   const handleContactFormSubmit = event => {
@@ -56,11 +56,11 @@ export const ContactForm = memo(() => {
         <input
           className={s.input}
           type="tel"
-          name="number"
+          name="phone"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          value={userInfo.number}
+          value={userInfo.phone}
           onChange={handleChange}
         />
       </label>
