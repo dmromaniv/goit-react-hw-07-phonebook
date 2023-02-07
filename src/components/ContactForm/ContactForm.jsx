@@ -1,12 +1,14 @@
 import { useState, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addContact } from 'redux/contacts/contactsSlice';
+import { selectContacts } from 'redux/selectors';
+import { addContact } from '../../redux/operations';
+
 import s from './ContactForm.module.css';
 
 export const ContactForm = memo(() => {
-  const contacts = useSelector(state => state.contacts);
   const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
   const [userInfo, setUserInfo] = useState({ name: '', number: '' });
 

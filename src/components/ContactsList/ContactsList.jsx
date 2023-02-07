@@ -1,33 +1,39 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 import { ContactItem } from 'components/ContactItem/ContactItem';
 import s from './ContactsList.module.css';
 
+import { fetchContacts } from 'redux/operations';
+import {
+  selectContacts,
+  selectFilteredContacts,
+  selectLoadingStatus,
+} from 'redux/selectors';
+
 export const ContactsList = () => {
-  const contacts = useSelector(state => state.contacts);
-  const filter = useSelector(state => state.filter.searchQuery);
+  const dispatch = useDispatch();
 
-  const filterContacts = () => {
-    const trimmedFilter = filter.toUpperCase().trim();
+  const contacts = useSelector(selectContacts);
+  const filteredContacts = useSelector(selectFilteredContacts);
+  const isLoading = useSelector(selectLoadingStatus);
 
-    if (trimmedFilter) {
-      const filteredContacts = contacts.filter(contact =>
-        contact.name.toUpperCase().includes(trimmedFilter)
-      );
-      return filteredContacts.length !== 0 ? filteredContacts : null;
-    }
-    return contacts;
-  };
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch, contacts.length]);
 
-  const filteredContacts = filterContacts();
-
-  return filteredContacts ? (
-    <ul className={s.list}>
-      {filteredContacts.map(({ id, name, number }) => (
-        <ContactItem key={id} id={id} name={name} number={number} />
-      ))}
-    </ul>
-  ) : (
-    <p>Sorry, we didn't find any contact</p>
+  return (
+    <>
+      {isLoading && <div>Loading contacts...</div>}
+      {filteredContacts ? (
+        <ul className={s.list}>
+          {filteredContacts.map(({ id, name, phone }) => (
+            <ContactItem key={id} id={id} name={name} number={phone} />
+          ))}
+        </ul>
+      ) : (
+        <p>Sorry, we didn't find any contact</p>
+      )}
+    </>
   );
 };
